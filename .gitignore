@@ -1,0 +1,33 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+release/
+out/
+
+# generated binaries and metadata (fetched by npm run assets in CI)
+resources/bin/*.exe
+resources/bin/*.zip
+resources/bin/*.txt
+resources/bin/*.version.txt
+resources/bin/.bundle-stamp
+electron-builder.generated.yml
+src/main/release-info.json
+
+# logs and local state
+*.log
+logs/
+npm-debug.log*
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# editor
+.vscode/
+.idea/
+*.swp
+*.swo

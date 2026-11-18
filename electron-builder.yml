@@ -1,0 +1,46 @@
+appId: app.savepoint.desktop
+productName: Savepoint
+copyright: Copyright © 2026 Savepoint
+directories:
+  output: dist
+  buildResources: build
+files:
+  - src/**/*
+  - package.json
+  - "!**/*.map"
+extraResources:
+  - from: resources/bin
+    to: bin
+    filter:
+      - "*.exe"
+      - "*.txt"
+asar: true
+compression: normal
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: build/icon.ico
+  artifactName: Savepoint-Setup-${version}.${ext}
+  executableName: Savepoint
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  shortcutName: Savepoint
+  uninstallDisplayName: Savepoint
+  deleteAppDataOnUninstall: false
+  runAfterFinish: true
+  artifactName: Savepoint-Setup-${version}.${ext}
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  installerHeaderIcon: build/icon.ico
+publish:
+  provider: github
+  owner: __OWNER__
+  repo: __REPO__
+  releaseType: release

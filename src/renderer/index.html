@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; font-src 'self'; connect-src 'self'; media-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Savepoint</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="booting">
+  <svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-mark" viewBox="0 0 32 32">
+      <path d="M27 16a11 11 0 1 1-3.22-7.78" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M13.2 11.4 21 16l-7.8 4.6V11.4Z" fill="currentColor"/>
+      <circle cx="27" cy="16" r="2.1" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-download" viewBox="0 0 24 24">
+      <path d="M12 3v11m0 0 4.2-4.2M12 14l-4.2-4.2M4 17.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-video" viewBox="0 0 24 24">
+      <rect x="3" y="5" width="13" height="14" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/>
+      <path d="m16 10 4.2-2.4v8.8L16 14v-4Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-audio" viewBox="0 0 24 24">
+      <path d="M4 14v-4m4 8V6m4 11V7m4 10v-6m4 4V9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24">
+      <path d="M3.5 7.5A2 2 0 0 1 5.5 5.5h3l2 2.5h8a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V7.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/>
+      <path d="M19.4 13.5a7.7 7.7 0 0 0 0-3l1.6-1.2-2-3.4-1.9.8a7.7 7.7 0 0 0-2.6-1.5L14.1 3h-4.2l-.4 2.2a7.7 7.7 0 0 0-2.6 1.5l-1.9-.8-2 3.4 1.6 1.2a7.7 7.7 0 0 0 0 3l-1.6 1.2 2 3.4 1.9-.8a7.7 7.7 0 0 0 2.6 1.5l.4 2.2h4.2l.4-2.2a7.7 7.7 0 0 0 2.6-1.5l1.9.8 2-3.4-1.6-1.2Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24">
+      <path d="M9 6v12M15 6v12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-play" viewBox="0 0 24 24">
+      <path d="M8 5.5 18 12 8 18.5v-13Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-x" viewBox="0 0 24 24">
+      <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-retry" viewBox="0 0 24 24">
+      <path d="M20 11a8 8 0 1 0-2.3 6.3M20 4v7h-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <path d="m5 12.5 4.4 4.4L19 7.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-external" viewBox="0 0 24 24">
+      <path d="M14 5h5v5M19 5l-7 7M18 14v4a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 18V7a1.5 1.5 0 0 1 1.5-1.5h4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24">
+      <path d="M4.5 7h15M9 7V4.5h6V7m-8 0 .8 12a1.5 1.5 0 0 0 1.5 1.4h5.4a1.5 1.5 0 0 0 1.5-1.4L17 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24">
+      <path d="M12 2.5c.6 5.4 3.6 8.4 9 9-5.4.6-8.4 3.6-9 9-.6-5.4-3.6-8.4-9-9 5.4-.6 8.4-3.6 9-9Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-command" viewBox="0 0 24 24">
+      <path d="M9 6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6Z" fill="none" stroke="currentColor" stroke-width="1.7"/>
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M12 10.5V17m0-9.4v.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-disc" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="12" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M12 3a9 9 0 0 1 9 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24">
+      <path d="M13.5 2 4 14h6l-1.5 8L20 9h-6.5l0-7Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+    </symbol>
+  </svg>
+
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient-glow glow-a"></div>
+    <div class="ambient-glow glow-b"></div>
+    <div class="grid-lines"></div>
+  </div>
+
+  <div class="shell">
+    <header class="titlebar">
+      <div class="brand" aria-label="Savepoint">
+        <span class="brand-mark"><svg><use href="#i-mark"></use></svg></span>
+        <span class="brand-word">savepoint</span>
+      </div>
+      <div class="titlebar-mid">
+        <button class="engine-pill" id="enginePill" type="button" title="Engine status">
+          <span class="dot" id="engineDot"></span>
+          <span id="engineLabel">Starting engine…</span>
+        </button>
+      </div>
+      <nav class="titlebar-actions">
+        <button class="ghost-icon" id="paletteBtn" type="button" title="Command palette (Ctrl+K)" aria-label="Open command palette">
+          <svg><use href="#i-command"></use></svg>
+          <span class="key-hint">Ctrl K</span>
+        </button>
+        <button class="ghost-icon" id="themeBtn" type="button" title="Toggle theme" aria-label="Toggle theme">
+          <span class="theme-glyph" id="themeGlyph">◐</span>
+        </button>
+        <button class="ghost-icon" id="settingsBtn" type="button" title="Settings" aria-label="Open settings">
+          <svg><use href="#i-settings"></use></svg>
+        </button>
+      </nav>
+    </header>
+
+    <main class="main">
+      <section class="composer" aria-labelledby="composerTitle">
+        <div class="composer-head">
+          <p class="eyebrow"><span class="eyebrow-line"></span> YouTube → your drive</p>
+          <h1 id="composerTitle">Save it<br /><span class="h1-em">before it’s gone.</span></h1>
+          <p class="lede">Paste a link. Get a clean MP4 or MP3 in your own folder. No accounts, no cloud, no nonsense.</p>
+        </div>
+
+        <form id="addForm" class="dropzone" autocomplete="off">
+          <div class="field-top">
+            <svg class="link-icon" aria-hidden="true"><use href="#i-download"></use></svg>
+            <label class="sr-only" for="urlInput">YouTube links</label>
+            <textarea id="urlInput" rows="2" spellcheck="false" placeholder="Paste a YouTube link…" aria-describedby="linkHint"></textarea>
+            <button class="btn-add" id="addBtn" type="submit">
+              <span>Grab it</span>
+              <span class="btn-arrow" aria-hidden="true">↗</span>
+            </button>
+          </div>
+          <div class="drop-foot">
+            <span class="hint" id="linkHint"><kbd>Ctrl</kbd><kbd>V</kbd> to paste · drop links anywhere · one per line for batches</span>
+            <span class="detected" id="detected" hidden></span>
+          </div>
+        </form>
+
+        <div class="composer-controls">
+          <div class="control-block">
+            <span class="control-label">Format</span>
+            <div class="segmented" role="group" aria-label="Output format">
+              <button type="button" data-format="mp4" class="seg-btn is-active" aria-pressed="true">
+                <svg><use href="#i-video"></use></svg> MP4
+              </button>
+              <button type="button" data-format="mp3" class="seg-btn" aria-pressed="false">
+                <svg><use href="#i-audio"></use></svg> MP3
+              </button>
+            </div>
+          </div>
+          <div class="control-block quality-block">
+            <span class="control-label" id="qualityLabel">Quality</span>
+            <div class="chips" id="qualityChips" role="group" aria-label="Quality"></div>
+          </div>
+        </div>
+
+        <div class="flow-strip" aria-hidden="true">
+          <span class="flow-step"><b>01</b>Paste a link</span>
+          <span class="flow-line"></span>
+          <span class="flow-step"><b>02</b>Pick MP4 or MP3</span>
+          <span class="flow-line"></span>
+          <span class="flow-step"><b>03</b>Saved to your drive</span>
+        </div>
+
+        <div class="folder-bar">
+          <button type="button" class="folder-pick" id="folderBtn" title="Change download folder">
+            <svg><use href="#i-folder"></use></svg>
+            <span class="folder-text" id="folderLabel">Downloads\Savepoint</span>
+          </button>
+          <button type="button" class="text-btn" id="openFolderBtn">Open folder</button>
+        </div>
+
+        <div class="library-rail" aria-label="Your library at a glance">
+          <div class="rail-cell">
+            <span class="rail-label">Saved</span>
+            <strong id="railFiles">0</strong>
+            <span class="rail-sub">files kept local</span>
+          </div>
+          <div class="rail-cell">
+            <span class="rail-label">On disk</span>
+            <strong id="railSize">0 MB</strong>
+            <span class="rail-sub">in your folder</span>
+          </div>
+          <div class="rail-cell">
+            <span class="rail-label">Engine</span>
+            <strong id="railEngine">—</strong>
+            <span class="rail-sub">auto-updating</span>
+          </div>
+        </div>
+
+        <div class="composer-foot">
+          <span class="stat-line">Tip: <kbd>Ctrl</kbd><kbd>K</kbd> opens every action.</span>
+          <span class="legal-mini" title="Savepoint is not affiliated with YouTube.">Only save what you have the right to keep.</span>
+        </div>
+      </section>
+
+      <section class="board" aria-labelledby="queueTitle">
+        <div class="board-head">
+          <div class="board-title">
+            <h2 id="queueTitle">Queue</h2>
+            <span class="count-badge" id="queueCount">0</span>
+          </div>
+          <div class="board-tools">
+            <div class="filter-pills" role="group" aria-label="Filter queue">
+              <button type="button" class="filter is-active" data-filter="all">All</button>
+              <button type="button" class="filter" data-filter="active">Active</button>
+              <button type="button" class="filter" data-filter="done">Done</button>
+            </div>
+            <button type="button" class="icon-btn" id="clearBtn" title="Clear finished downloads" aria-label="Clear finished downloads">
+              <svg><use href="#i-trash"></use></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="jobs" id="jobList" aria-live="polite"></div>
+
+        <div class="empty" id="emptyState">
+          <div class="empty-orbit" aria-hidden="true">
+            <div class="orbit-ring ring-one"></div>
+            <div class="orbit-ring ring-two"></div>
+            <div class="orbit-core">
+              <svg><use href="#i-download"></use></svg>
+            </div>
+            <span class="orbit-dot dot-one"></span>
+            <span class="orbit-dot dot-two"></span>
+          </div>
+          <h3>Nothing queued. Yet.</h3>
+          <p>Paste a link above or drop one anywhere in this window. Video lands as MP4, audio as MP3.</p>
+          <button type="button" class="link-btn" id="pasteBtn">Paste from clipboard <span aria-hidden="true">↗</span></button>
+        </div>
+
+        <div class="board-foot">
+          <span id="queueSummary">Ready when you are.</span>
+          <span class="board-foot-right" id="historyStat"></span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="statusbar">
+      <div class="status-left">
+        <span class="status-item" id="ffmpegStatus" title="Converter status">
+          <span class="status-dot"></span>
+          <span id="ffmpegLabel">Converter</span>
+        </span>
+        <span class="status-sep"></span>
+        <span class="status-item subtle" id="versionStatus">v1.0.0</span>
+        <span class="status-item subtle lite-badge" id="liteBadge" hidden>Lite mode</span>
+      </div>
+      <div class="status-right">
+        <button type="button" class="update-pill" id="updateBtn" hidden></button>
+        <span class="status-item subtle" id="engineVersion">Engine —</span>
+        <span class="status-sep"></span>
+        <span class="status-item subtle">Made for offline</span>
+      </div>
+    </footer>
+  </div>
+
+  <div class="drop-overlay" id="dropOverlay" hidden>
+    <div class="drop-card">
+      <div class="drop-glyph"><svg><use href="#i-download"></use></svg></div>
+      <strong>Drop to queue</strong>
+      <span>YouTube links only. Multiple links welcome.</span>
+    </div>
+  </div>
+
+  <dialog class="settings-sheet" id="settingsDialog" aria-labelledby="settingsTitle">
+    <div class="sheet-inner">
+      <header class="sheet-head">
+        <div>
+          <p class="eyebrow">Tune it</p>
+          <h2 id="settingsTitle">Settings</h2>
+        </div>
+        <button type="button" class="icon-btn" id="closeSettingsBtn" aria-label="Close settings">
+          <svg><use href="#i-x"></use></svg>
+        </button>
+      </header>
+
+      <div class="sheet-body">
+        <section class="setting-group">
+          <h3>Downloads</h3>
+          <div class="setting-row">
+            <div class="setting-copy">
+              <label for="settingsFolder">Save files to</label>
+              <p>Your files stay here. Nothing is uploaded.</p>
+            </div>
+            <button type="button" class="value-btn" id="settingsFolder">Downloads\Savepoint</button>
+          </div>
+          <div class="setting-row">
+            <div class="setting-copy">
+              <label for="settingsConcurrency">Download at once</label>
+              <p>Lower this on older PCs or slow connections.</p>
+            </div>
+            <div class="mini-seg" id="settingsConcurrency" role="group" aria-label="Concurrent downloads">
+              <button type="button" data-value="1">1</button>
+              <button type="button" data-value="2">2</button>
+              <button type="button" data-value="3">3</button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-copy">
+              <label>Playlists</label>
+              <p>Add every video in a playlist link (up to 100).</p>
+            </div>
+            <button type="button" class="switch" id="settingsPlaylist" role="switch" aria-checked="false"><span></span></button>
+          </div>
+          <div class="setting-row">
+            <div class="setting-copy">
+              <label for="settingsCookies">Use browser cookies</label>
+              <p>Helps with age-restricted or bot-checked videos.</p>
+            </div>
+            <select id="settingsCookies" class="select">
+              <option value="none">Off</option>
+              <option value="chrome">Chrome</option>
+              <option value="edge">Edge</option>
+              <option value="firefox">Firefox</option>
+              <option value="brave">Brave</option>
+              <option value="opera">Opera</option>
+              <option value="vivaldi">Vivaldi</option>
+              <option value="chromium">Chromium</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="setting-group">
+          <h3>Appearance</h3>
+          <div class="setting-row">
+            <div class="setting-copy">
+              <label>Theme</label>
+              <p>Phosphor is the signature. Paper is for daylight.</p>
+            </div>
+            <div class="mini-seg" id="settingsTheme" role="group" aria-label="Theme">
+              <button type="button" data-value="system">Auto</button>
+              <button type="button" data-value="dark">Dark</button>
+              <button type="button" data-value="light">Light</button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-copy">
+              <label>Lite mode</label>
+              <p>Less motion and GPU work. Auto follows your hardware.</p>
+            </div>
+            <div class="mini-seg" id="settingsLite" role="group" aria-label="Lite mode">
+              <button type="button" data-value="auto">Auto</button>
+              <button type="button" data-value="on">On</button>
+              <button type="button" data-value="off">Off</button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-copy">
+              <label>Reduce motion</label>
+              <p>Turn off ambient movement and soft transitions.</p>
+            </div>
+            <button type="button" class="switch" id="settingsMotion" role="switch" aria-checked="false"><span></span></button>
+          </div>
+        </section>
+
+        <section class="setting-group">
+          <h3>Engines</h3>
+          <div class="engine-box">
+            <div class="engine-row">
+              <div>
+                <strong>Downloader</strong>
+                <span class="mono" id="engineVersionSetting">yt-dlp —</span>
+              </div>
+              <span class="pill-ok" id="engineReadyBadge">Ready</span>
+            </div>
+            <div class="engine-row">
+              <div>
+                <strong>Converter</strong>
+                <span class="mono" id="ffmpegVersionSetting">ffmpeg —</span>
+              </div>
+              <span class="pill-ok">Bundled</span>
+            </div>
+            <div class="engine-progress" id="engineProgress" hidden>
+              <div class="bar"><i></i></div>
+              <span id="engineProgressLabel">Updating…</span>
+            </div>
+            <button type="button" class="btn-secondary" id="engineUpdateBtn">Update engines</button>
+            <p class="tiny-note">Savepoint pulls the newest yt-dlp build from GitHub so it keeps working when YouTube changes.</p>
+          </div>
+          <div class="setting-row">
+            <div class="setting-copy">
+              <label>Keep engines fresh</label>
+              <p>Update the downloader automatically when the app updates.</p>
+            </div>
+            <button type="button" class="switch" id="settingsEngineAuto" role="switch" aria-checked="true"><span></span></button>
+          </div>
+        </section>
+
+        <section class="setting-group">
+          <h3>App updates</h3>
+          <div class="update-box">
+            <div class="update-line">
+              <div>
+                <strong>Savepoint <span id="appVersionSetting">1.0.0</span></strong>
+                <span class="mono" id="updateStateLabel">Not checked yet</span>
+              </div>
+              <button type="button" class="btn-secondary small" id="checkUpdateBtn">Check now</button>
+            </div>
+            <div class="update-actions" id="updateActions" hidden>
+              <button type="button" class="btn-primary small" id="downloadUpdateBtn">Download update</button>
+              <button type="button" class="btn-secondary small" id="installUpdateBtn" hidden>Restart &amp; install</button>
+            </div>
+            <div class="update-progress" id="updateProgress" hidden>
+              <div class="bar"><i></i></div>
+              <span id="updateProgressLabel">Downloading…</span>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-copy">
+              <label>Check automatically</label>
+              <p>Quietly look for updates shortly after launch, then every 4 hours.</p>
+            </div>
+            <button type="button" class="switch" id="settingsAutoUpdate" role="switch" aria-checked="true"><span></span></button>
+          </div>
+        </section>
+
+        <section class="setting-group">
+          <h3>About</h3>
+          <div class="about-box">
+            <div class="about-brand">
+              <span class="brand-mark"><svg><use href="#i-mark"></use></svg></span>
+              <div>
+                <strong>Savepoint</strong>
+                <span class="mono" id="aboutVersion">v1.0.0</span>
+              </div>
+            </div>
+            <p>A small, fast desktop app for keeping the videos you’re allowed to keep. Built with Electron, yt-dlp and ffmpeg.</p>
+            <div class="about-links">
+              <button type="button" class="link-btn" id="landingLink">Project page <span>↗</span></button>
+              <button type="button" class="link-btn" id="githubLink">Source <span>↗</span></button>
+            </div>
+            <div class="history-box">
+              <span id="historySummary">No history yet</span>
+              <button type="button" class="text-btn danger" id="clearHistoryBtn">Clear history</button>
+            </div>
+            <p class="legal-copy">Savepoint is an independent tool and is not affiliated with or endorsed by YouTube. Download only media you own or have permission to save, and respect the platform’s terms and local copyright law.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="palette" id="palette" hidden>
+    <div class="palette-scrim" data-close-palette></div>
+    <div class="palette-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+      <div class="palette-search">
+        <svg><use href="#i-command"></use></svg>
+        <input id="paletteInput" type="text" placeholder="Type a command…" autocomplete="off" spellcheck="false" />
+        <kbd>Esc</kbd>
+      </div>
+      <div class="palette-list" id="paletteList" role="listbox"></div>
+      <div class="palette-foot"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> select</span></div>
+    </div>
+  </div>
+
+  <div class="onboarding" id="onboarding" hidden>
+    <div class="onboarding-card">
+      <span class="brand-mark big"><svg><use href="#i-mark"></use></svg></span>
+      <p class="eyebrow">Welcome to Savepoint</p>
+      <h2>Your media,<br /><span class="h1-em">kept local.</span></h2>
+      <ul class="onboarding-list">
+        <li><span class="num">01</span><div><strong>Paste any YouTube link</strong><p>Or drop it straight onto this window.</p></div></li>
+        <li><span class="num">02</span><div><strong>Pick MP4 or MP3</strong><p>Choose a resolution or bitrate. Defaults are sensible.</p></div></li>
+        <li><span class="num">03</span><div><strong>It lands in your folder</strong><p>Open it, move it, back it up. It’s yours.</p></div></li>
+      </ul>
+      <p class="onboarding-legal">Only download videos you own or have permission to save. Savepoint is not affiliated with YouTube.</p>
+      <button type="button" class="btn-primary wide" id="finishOnboarding">Start saving <span class="btn-arrow">↗</span></button>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toasts" aria-live="polite"></div>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

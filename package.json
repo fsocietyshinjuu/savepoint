@@ -1,0 +1,41 @@
+{
+  "name": "savepoint",
+  "productName": "Savepoint",
+  "version": "1.0.0",
+  "description": "A fast, lightweight desktop app to keep YouTube video and audio offline.",
+  "author": {
+    "name": "Shinjuu"
+  },
+  "license": "MIT",
+  "private": true,
+  "main": "src/main/main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fsocietyshinjuu/savepoint.git"
+  },
+  "homepage": "https://fsocietyshinjuu.github.io/savepoint/",
+  "bugs": {
+    "url": "https://github.com/fsocietyshinjuu/savepoint/issues"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "assets": "node scripts/make-icons.mjs && node scripts/fetch-binaries.mjs",
+    "prepare:release": "node scripts/prepare-release.mjs",
+    "dist": "npm run assets && npm run prepare:release && electron-builder --config electron-builder.generated.yml --win nsis",
+    "dist:dir": "npm run assets && npm run prepare:release && electron-builder --config electron-builder.generated.yml --win nsis --dir",
+    "release": "npm run assets && npm run prepare:release && electron-builder --config electron-builder.generated.yml --win nsis --publish always",
+    "release:ci": "npm run assets && node scripts/set-version.mjs && npm run prepare:release && electron-builder --config electron-builder.generated.yml --win nsis --publish always",
+    "capture": "node scripts/capture.mjs"
+  },
+  "dependencies": {
+    "electron-log": "^5.4.4",
+    "electron-updater": "^6.8.11"
+  },
+  "devDependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.2.8",
+    "electron": "^45.3.4",
+    "electron-builder": "^26.18.0",
+    "ffmpeg-static": "^5.3.0"
+  }
+}

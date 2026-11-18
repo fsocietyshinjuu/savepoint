@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to build (for example 1.0.1)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    name: Build and publish Windows installer
+    runs-on: windows-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Resolve version
+        shell: bash
+        run: node scripts/set-version.mjs
+        env:
+          SAVEPOINT_VERSION: ${{ inputs.version }}
+
+      - name: Fetch engines, fonts, icons
+        run: npm run assets
+
+      - name: Prepare release metadata
+        run: node scripts/prepare-release.mjs
+
+      - name: Build and publish to GitHub Releases
+        run: npx electron-builder --config electron-builder.generated.yml --win nsis --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EP_GH_IGNORE_TIME: "true"
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: savepoint-windows
+          path: |
+            dist/*.exe
+            dist/latest.yml
+          if-no-files-found: error
