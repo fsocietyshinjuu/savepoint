@@ -62,16 +62,16 @@ for (const button of shotButtons) {
 }
 
 /* the light screenshot is hidden on load, so lazy loading would leave it blank
-   for a beat on first switch — warm it in the background instead */
+   for a beat on first switch — warm it once the page has finished loading */
 function warmLightShot() {
   const image = new Image();
   image.src = './assets/app-light.png';
 }
 
-if ('requestIdleCallback' in window) {
-  requestIdleCallback(warmLightShot, { timeout: 3000 });
+if (document.readyState === 'complete') {
+  warmLightShot();
 } else {
-  window.addEventListener('load', () => setTimeout(warmLightShot, 800), { once: true });
+  window.addEventListener('load', warmLightShot, { once: true });
 }
 
 /* ---------- nav ---------- */

@@ -74,14 +74,13 @@ npm run dist       # build the NSIS installer into dist\
 ### Release
 
 ```powershell
-# after setting the real repository in package.json
-npm version patch
-git push --follow-tags
+git tag v1.0.1
+git push origin v1.0.1
 ```
 
-Pushing a `v*` tag runs `.github/workflows/release.yml`, which builds on Windows, publishes the installer and `latest.yml` to GitHub Releases, and lets installed apps auto-update. The landing page is published from `landing/` by `.github/workflows/pages.yml`.
+Pushing a `v*` tag runs `.github/workflows/release.yml`, which stamps the version from the tag, builds on Windows, publishes the installer and `latest.yml` to GitHub Releases, and lets installed apps auto-update. The landing page is published from `landing/` by `.github/workflows/pages.yml`.
 
-Set the repository in `package.json` (`repository.url`) and, if needed, `GITHUB_REPOSITORY` for CI. `scripts/prepare-release.mjs` writes `electron-builder.generated.yml` and `src/main/release-info.json` from it.
+The owner and repository name come from `package.json`; `scripts/prepare-release.mjs` writes `electron-builder.generated.yml` and `src/main/release-info.json` from it.
 
 ## Privacy
 

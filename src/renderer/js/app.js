@@ -3,8 +3,8 @@
 const sp = window.savepoint;
 
 const LINKS = {
-  landing: 'https://savepoint-app.github.io/savepoint/',
-  github: 'https://github.com/savepoint-app/savepoint',
+  landing: 'https://fsocietyshinjuu.github.io/savepoint/',
+  github: 'https://github.com/fsocietyshinjuu/savepoint',
 };
 
 const QUALITY = {
