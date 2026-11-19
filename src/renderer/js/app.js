@@ -5,6 +5,7 @@ const sp = window.savepoint;
 const LINKS = {
   landing: 'https://fsocietyshinjuu.github.io/savepoint/',
   github: 'https://github.com/fsocietyshinjuu/savepoint',
+  email: 'mailto:fsociety.shinjuu@gmail.com',
 };
 
 const QUALITY = {
@@ -56,7 +57,7 @@ function cacheElements() {
     'engineReadyBadge', 'ffmpegVersionSetting', 'engineProgress', 'engineProgressLabel', 'engineUpdateBtn',
     'settingsEngineAuto', 'appVersionSetting', 'updateStateLabel', 'checkUpdateBtn', 'updateActions',
     'downloadUpdateBtn', 'installUpdateBtn', 'updateProgress', 'updateProgressLabel', 'settingsAutoUpdate',
-    'aboutVersion', 'landingLink', 'githubLink', 'historySummary', 'clearHistoryBtn',
+    'aboutVersion', 'landingLink', 'githubLink', 'devMailLink', 'historySummary', 'clearHistoryBtn',
     'addForm', 'urlInput', 'addBtn', 'detected', 'folderBtn', 'folderLabel', 'openFolderBtn',
     'railFiles', 'railSize', 'railEngine', 'qualityChips', 'qualityLabel', 'queueCount', 'clearBtn',
     'jobList', 'emptyState', 'pasteBtn', 'queueSummary', 'historyStat', 'ffmpegStatus', 'ffmpegLabel', 'versionStatus',
@@ -1074,6 +1075,7 @@ function bindEvents() {
 
   els.landingLink.addEventListener('click', () => sp.system.openExternal(LINKS.landing));
   els.githubLink.addEventListener('click', () => sp.system.openExternal(LINKS.github));
+  els.devMailLink.addEventListener('click', () => sp.system.openExternal(LINKS.email));
 
   els.finishOnboarding.addEventListener('click', async () => {
     els.onboarding.hidden = true;

@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "description": "A fast, lightweight desktop app to keep YouTube video and audio offline.",
   "author": {
-    "name": "Shinjuu"
+    "name": "Shinjuu",
+    "email": "fsociety.shinjuu@gmail.com"
   },
   "license": "MIT",
   "private": true,

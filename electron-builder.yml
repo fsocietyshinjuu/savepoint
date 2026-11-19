@@ -1,6 +1,6 @@
 appId: app.savepoint.desktop
 productName: Savepoint
-copyright: Copyright © 2026 Savepoint
+copyright: Copyright © 2026 Shinjuu
 directories:
   output: dist
   buildResources: build

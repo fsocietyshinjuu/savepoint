@@ -208,7 +208,7 @@ function registerIpc() {
   handle('system:openExternal', async (url) => {
     try {
       const parsed = new URL(url);
-      if (parsed.protocol !== 'https:') return false;
+      if (parsed.protocol !== 'https:' && parsed.protocol !== 'mailto:') return false;
       await shell.openExternal(parsed.toString());
       return true;
     } catch {

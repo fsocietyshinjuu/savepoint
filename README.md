@@ -92,6 +92,10 @@ The owner and repository name come from `package.json`; `scripts/prepare-release
 
 Savepoint is an independent tool. It is **not affiliated with, endorsed by, or sponsored by YouTube**. Only download media you own or have permission to save, and respect the platform’s terms and local copyright law. The authors take no responsibility for misuse.
 
+## Author
+
+Built by **Shinjuu** — [fsociety.shinjuu@gmail.com](mailto:fsociety.shinjuu@gmail.com).
+
 ## Third-party
 
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp) — Unlicense
