@@ -45,11 +45,26 @@ jobs:
       - name: Prepare release metadata
         run: node scripts/prepare-release.mjs
 
-      - name: Build and publish to GitHub Releases
-        run: npx electron-builder --config electron-builder.generated.yml --win nsis --publish always
+      # Publish with gh rather than `--publish always`: electron-builder uploads
+      # assets in parallel and has twice created two releases for the same tag,
+      # which makes /releases/download/<tag>/latest.yml 404 and breaks updates.
+      - name: Build installer
+        run: npx electron-builder --config electron-builder.generated.yml --win nsis --publish never
+
+      - name: Publish release
+        shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          EP_GH_IGNORE_TIME: "true"
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          TAG="v$VERSION"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/Savepoint-Setup-*.exe dist/latest.yml dist/*.blockmap \
+              --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$TAG" dist/Savepoint-Setup-*.exe dist/latest.yml dist/*.blockmap \
+              --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "$VERSION" --generate-notes
+          fi
 
       - name: Upload installer artifact
         uses: actions/upload-artifact@v4
