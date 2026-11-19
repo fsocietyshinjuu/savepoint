@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -37,6 +38,25 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: landing
+
+      # deploy-pages sometimes queries the artifact API before the artifact we
+      # just uploaded is listable, then fails with "Found 0 artifact(s)".
+      - name: Wait for the uploaded artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          for attempt in $(seq 1 20); do
+            count=$(gh api "repos/$REPO/actions/runs/$RUN_ID/artifacts" --jq '[.artifacts[] | select(.name=="github-pages")] | length')
+            if [ "$count" -gt 0 ]; then
+              echo "artifact visible after attempt $attempt"
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "github-pages artifact never became visible" >&2
+          exit 1
 
       - name: Deploy
         id: deployment
