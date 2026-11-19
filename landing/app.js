@@ -61,6 +61,19 @@ for (const button of shotButtons) {
   button.addEventListener('click', () => showShot(button.dataset.shot));
 }
 
+/* the light screenshot is hidden on load, so lazy loading would leave it blank
+   for a beat on first switch — warm it in the background instead */
+function warmLightShot() {
+  const image = new Image();
+  image.src = './assets/app-light.png';
+}
+
+if ('requestIdleCallback' in window) {
+  requestIdleCallback(warmLightShot, { timeout: 3000 });
+} else {
+  window.addEventListener('load', () => setTimeout(warmLightShot, 800), { once: true });
+}
+
 /* ---------- nav ---------- */
 
 let lastScrolled = null;
